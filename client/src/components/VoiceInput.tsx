@@ -11,8 +11,13 @@ interface Props {
 }
 
 function VoiceInput({ focusIngredients }: Props) {
-  const { setIngredients, voiceInput, setVoiceInput, setLoadingIngredients } =
-    useSearch();
+  const {
+    setIngredients,
+    voiceInput,
+    setVoiceInput,
+    ingredients,
+    setLoadingIngredients,
+  } = useSearch();
   const { transcript, listening, browserSupportsSpeechRecognition } =
     useSpeechRecognition({ clearTranscriptOnListen: true });
 
@@ -24,7 +29,7 @@ function VoiceInput({ focusIngredients }: Props) {
     if (previousInput.trim().toUpperCase() !== voiceInput.toUpperCase().trim())
       setIsSame(false);
     else setIsSame(true);
-  }, [previousInput, voiceInput]);
+  }, [previousInput, ingredients, voiceInput]);
 
   const toggleMicrophone = () => {
     if (listening) {
@@ -55,8 +60,8 @@ function VoiceInput({ focusIngredients }: Props) {
         setIngredients(res.data);
         setLoadingIngredients(false);
       })
-      .catch((err) => {
-        console.log(err);
+      .catch(() => {
+        setIsSame(false);
         setLoadingIngredients(false);
       });
 
@@ -90,22 +95,35 @@ function VoiceInput({ focusIngredients }: Props) {
           />
         </button>
         <textarea
-          className="border-[1px] border-gray-500 w-full sm:w-[80%] min-h-32 rounded-md mb-6 sm:mb-0 sm:ml-4 p-3"
+          className={
+            "border-[1px] border-gray-500 w-full sm:w-[80%] min-h-32 rounded-md mb-6 sm:mb-0 sm:ml-4 p-3 " +
+            (listening && "bg-gray-200/35 text-gray-700")
+          }
           value={listening ? transcript : voiceInput}
           onChange={(event) => setVoiceInput(event.target.value)}
         ></textarea>
       </div>
 
-      <button
-        className={
-          "bg-gray-800 hover:bg-gray-900 text-white py-2 px-3 rounded-md mb-3 sm:mb-0 mx-4 drop-shadow-md" +
-          (isSame && " bg-gray-300/50 hover:bg-gray-300/50")
-        }
-        onClick={extractIngredients}
-        disabled={isSame}
-      >
-        Extract Ingredients
-      </button>
+      {listening && (
+        <p className="text-center text-blue-500 font-semibold py-3 mb-14">
+          Stop recording to extract ingredients
+        </p>
+      )}
+
+      {!listening && (
+        <button
+          className={
+            "text-white py-2 px-3 rounded-md mb-3 sm:mb-0 mx-4 drop-shadow-md " +
+            (isSame || listening
+              ? " bg-gray-400/35 hover:bg-gray-200/50"
+              : " bg-gray-800 hover:bg-gray-900")
+          }
+          onClick={extractIngredients}
+          disabled={isSame}
+        >
+          Extract Ingredients
+        </button>
+      )}
     </div>
   );
 }
