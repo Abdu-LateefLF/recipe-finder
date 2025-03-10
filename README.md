@@ -19,7 +19,7 @@ Short demo on how it works! You can try it yourself [here](https://airecipefinde
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-username/ai-recipe-finder.git
+   git clone https://github.com/Abdu-LateefLF/recipe-finder
    ```
 2. Install dependencies for the backend and frontend:
    ```bash
