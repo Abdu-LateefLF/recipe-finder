@@ -26,7 +26,7 @@ Short demo on how it works! You can try it yourself [here](https://airecipefinde
    cd backend && npm install
    cd ../frontend && npm install
    ```
-3. Add your environment variables (API keys, database URI, etc.) in a .env file.
+3. Add your environment variables (OpenAI API key, database URI, etc.) in a .env file.
 4. Start the development servers:
    ```bash
    cd backend && npm start
